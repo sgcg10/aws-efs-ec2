@@ -1,0 +1,8 @@
+dependencies:
+  - dev/ec2.yaml
+parameters:
+  VpcId: {{ var.vpc_id }}
+  Environment: {{ var.environment }}
+  Subnet: {{ var.subnet_id }}
+stack_name: {{ var.stack_name }}-{{ var.environment }}-efs
+template_path: efs.yaml

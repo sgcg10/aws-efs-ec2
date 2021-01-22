@@ -1,0 +1,83 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >-
+  EFS configuration for the EC2 instances
+
+Parameters:
+
+  VpcId:
+    Description: VpcId
+    Type: String
+    Default: ""
+
+  Environment:
+    Description: Environment (dev/qa/prod)
+    Type: String
+    Default: "dev"
+
+  Subnet:
+    Description: Subnet for your EC2 instances
+    Type: String
+    Default: ""
+
+Resources:
+  EFSFileSystem:
+    Type: 'AWS::EFS::FileSystem'
+    Properties:
+      PerformanceMode: generalPurpose
+      FileSystemTags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref Environment
+  EFSMountTarget:
+    Type: 'AWS::EFS::MountTarget'
+    Properties:
+      FileSystemId: !Ref EFSFileSystem
+      SubnetId: !Ref Subnet
+      SecurityGroups:
+        - !Ref EFSSecurityGroup
+  EFSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EFS
+      GroupName:
+        Fn::Sub: ${Environment}-efs-main-sg
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Environment
+          Value:
+            Ref: Environment
+        - Key: Name
+          Value: efs-SG
+  SecurityGroupIngressA:
+    Type: AWS::EC2::SecurityGroupIngress
+    DependsOn: EFSSecurityGroup
+    Properties:
+      GroupId: !Ref EFSSecurityGroup
+      FromPort: 2049
+      IpProtocol: "tcp"
+      ToPort: 2049
+      SourceSecurityGroupId:
+        Fn::ImportValue:
+          Fn::Sub: ${Environment}-EC2-sg-A
+  SecurityGroupIngressB:
+    Type: AWS::EC2::SecurityGroupIngress
+    DependsOn: EFSSecurityGroup
+    Properties:
+      GroupId: !Ref EFSSecurityGroup
+      FromPort: 2049
+      IpProtocol: "tcp"
+      ToPort: 2049
+      SourceSecurityGroupId:
+        Fn::ImportValue:
+          Fn::Sub: ${Environment}-EC2-sg-B
+
+Outputs:
+  ElasticFileSystem:
+    Description: Elastic file system.
+    Value: !Ref EFSFileSystem
+  EFSMountTarget:
+    Description: EFS mount target Id
+    Value: !Ref EFSMountTarget
