@@ -1,0 +1,10 @@
+parameters:
+  VpcId: {{ var.vpc_id }}
+  MyIP: {{ var.my_ip }}
+  InstanceAMI: {{ var.instance_ami }}
+  InstanceType: {{ var.instance_type }}
+  Environment: {{ var.environment }}
+  Subnet: {{ var.subnet_id }}
+  EC2Key: {{ var.ec2_key }}
+stack_name: {{ var.stack_name }}-{{ var.environment }}-ec2
+template_path: ec2.yaml

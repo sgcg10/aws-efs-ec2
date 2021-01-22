@@ -1,0 +1,9 @@
+profile: test
+stack_name: sceptre-stack
+environment: dev
+vpc_id: vpc-7621aa0c
+my_ip: 38.99.125.23/32
+instance_ami: "ami-0be2609ba883822ec"
+instance_type: "t2.micro"
+subnet_id: "subnet-c33707cc"
+ec2_key: "ec2_key"
