@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 
 
 Description: >-
-  EC2 instances and their Security Groups
+  EC2 instances configuration
 
 
 Parameters:
@@ -44,46 +44,12 @@ Parameters:
     Default: ""
 
 Resources:
-  InstanceSecurityGroupA:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Security group for EC2 instance A
-      GroupName:
-        Fn::Sub: ${Environment}-sg-ec2-A
-      VpcId: !Ref VpcId
-      # INGRESS RULE
-      SecurityGroupIngress:
-        - Description: SSH access
-          IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: !Ref MyIP
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Sub: ${Environment}-ec2-sg-A
-  InstanceSecurityGroupB:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Security group for EC2 instance B
-      GroupName:
-        Fn::Sub: ${Environment}-sg-ec2-B
-      VpcId: !Ref VpcId
-      # INGRESS RULE
-      SecurityGroupIngress:
-        - Description: SSH access
-          IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: !Ref MyIP
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Sub: ${Environment}-ec2-sg-B
   EC2InstanceA:
     Type: AWS::EC2::Instance
     Properties:
-      SecurityGroupIds: [!Ref InstanceSecurityGroupA]
+      SecurityGroupIds:
+        - Fn::ImportValue:
+            Fn::Sub: ${Environment}-EC2-sg-A
       ImageId:
         Ref: InstanceAMI
       InstanceType:
@@ -99,7 +65,9 @@ Resources:
   EC2InstanceB:
     Type: AWS::EC2::Instance
     Properties:
-      SecurityGroupIds: [!Ref InstanceSecurityGroupB]
+      SecurityGroupIds:
+        - Fn::ImportValue:
+            Fn::Sub: ${Environment}-EC2-sg-B
       ImageId:
         Ref: InstanceAMI
       InstanceType:
@@ -112,18 +80,3 @@ Resources:
         - Key: Name
           Value:
             Fn::Sub: ${Environment}-ec2-instance-B
-
-
-Outputs:
-  InstanceSecurityGroupA:
-    Value: !GetAtt InstanceSecurityGroupA.GroupId
-    Description: Security Group for EC2 instance A
-    Export:
-      Name:
-        Fn::Sub: ${Environment}-EC2-sg-A
-  InstanceSecurityGroupB:
-    Value: !GetAtt InstanceSecurityGroupB.GroupId
-    Description: Security Group for EC2 instance B
-    Export:
-      Name:
-        Fn::Sub: ${Environment}-EC2-sg-B
