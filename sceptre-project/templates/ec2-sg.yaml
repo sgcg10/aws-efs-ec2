@@ -1,0 +1,96 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+
+Description: >-
+  EC2 Security Groups
+
+
+Parameters:
+
+  VpcId:
+    Description: VpcId
+    Type: String
+    Default: ""
+
+  MyIP:
+    Description: My IP address to SSH the EC2 instance
+    Type: String
+    Default: ""
+
+  Environment:
+    Description: Environment (dev/qa/prod)
+    Type: String
+    Default: "dev"
+
+  InstanceAMI:
+    Description: Instance AMI (free tier elegible)
+    Type: String
+    Default: ""
+
+  InstanceType:
+    Description: Instance Type (select t2.micro because of the free tier)
+    Type: String
+    Default: "t2.micro"
+
+  Subnet:
+    Description: Subnet for your EC2 instances
+    Type: String
+    Default: ""
+
+  EC2Key:
+    Description: Key to access EC2 instance
+    Type: String
+    Default: ""
+
+Resources:
+  InstanceSecurityGroupA:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EC2 instance A
+      GroupName:
+        Fn::Sub: ${Environment}-sg-ec2-A
+      VpcId: !Ref VpcId
+      # INGRESS RULE
+      SecurityGroupIngress:
+        - Description: SSH access
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref MyIP
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: ${Environment}-ec2-sg-A
+  InstanceSecurityGroupB:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EC2 instance B
+      GroupName:
+        Fn::Sub: ${Environment}-sg-ec2-B
+      VpcId: !Ref VpcId
+      # INGRESS RULE
+      SecurityGroupIngress:
+        - Description: SSH access
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref MyIP
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: ${Environment}-ec2-sg-B
+
+Outputs:
+  InstanceSecurityGroupA:
+    Value: !GetAtt InstanceSecurityGroupA.GroupId
+    Description: Security Group for EC2 instance A
+    Export:
+      Name:
+        Fn::Sub: ${Environment}-EC2-sg-A
+  InstanceSecurityGroupB:
+    Value: !GetAtt InstanceSecurityGroupB.GroupId
+    Description: Security Group for EC2 instance B
+    Export:
+      Name:
+        Fn::Sub: ${Environment}-EC2-sg-B

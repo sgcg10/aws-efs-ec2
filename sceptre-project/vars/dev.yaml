@@ -1,9 +1,10 @@
 profile: test
 stack_name: sceptre-stack
 environment: dev
-vpc_id: vpc-7621aa0c
+vpc_id: vpc-9f875ae7
 my_ip: 38.99.125.23/32
-instance_ami: "ami-0be2609ba883822ec"
-instance_type: "t2.micro"
-subnet_id: "subnet-c33707cc"
-ec2_key: "ec2_key"
+instance_ami: "ami-0686851c4e7b1a8e1"
+instance_type: "t2.nano"
+subnet_id: "subnet-5af5da23"
+ec2_key: "ec2-test-efs"
+region: us-west-2

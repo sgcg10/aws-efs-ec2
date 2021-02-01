@@ -1,5 +1,5 @@
 dependencies:
-  - dev/ec2.yaml
+  - dev/ec2-sg.yaml
 parameters:
   VpcId: {{ var.vpc_id }}
   Environment: {{ var.environment }}
