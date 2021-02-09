@@ -34,10 +34,10 @@ Sharing a file between the two EC2 instances.
 
     ```
     sudo su
-    mkdir -p /your/mount/point/  
-    chown ec2-user:ec2-user /your/mount/point/
+    mkdir -p /your/mount/point/      
+    chown centos:centos /your/mount/point/
     # In the command below change the FS id and the region
-    mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs-xxxxxxx.efs.us-east-1.amazonaws.com:/ /mnt/myefsdata 
+    mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs-xxxxxxx.efs.us-east-1.amazonaws.com:/ /your/mount/point/ 
     ```
 
 3. You can verify your mount point is attached by using `df -h`:
