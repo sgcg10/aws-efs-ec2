@@ -1,10 +1,17 @@
-profile: test
-stack_name: sceptre-stack
+#Profile in AWS, you can see your profile when you configure your AWS credentials with aws config command
+profile: default-profile
+#Stack name that you want to use for your config
+stack_name: sceptre-stack-name
 environment: dev
-vpc_id: vpc-9f875ae7
-my_ip: 38.99.125.23/32
-instance_ami: "ami-0686851c4e7b1a8e1"
+#Put the VPC-id like your account in AWS
+vpc_id: vpc-id
+#Put your PUBLIC IP to configure CIDR in the security group
+my_ip: 10.10.10.10/32
+#Select whatever AMI ID you need to run the VM
+instance_ami: "ami-XXXXXXXXXXXX"
 instance_type: "t2.nano"
-subnet_id: "subnet-5af5da23"
-ec2_key: "ec2-test-efs"
+#Choose a proper subnet ID from your AWS account
+subnet_id: "subnet-XXXXXXXX"
+#Put your EC2 key to connect via SSH to your instance
+ec2_key: "your-ec2-key"
 region: us-west-2
